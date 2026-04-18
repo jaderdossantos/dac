@@ -27,13 +27,12 @@
       });
 
       if (res.ok) {
-        alert('Usuário cadastrado com sucesso!');
-        
-        // 🔥 REDIRECIONA PRO LOGIN
-        window.location.href = '/login.html';
-      } else {
-        alert('Erro ao cadastrar');
-      }
+  alert('Usuário cadastrado com sucesso!');
+  window.location.href = '/login.html';
+} else {
+  const erro = await res.text();
+  alert('Erro: ' + erro);
+}
     }
   </script>
 
