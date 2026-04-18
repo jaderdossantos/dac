@@ -20,10 +20,12 @@ app.post('/usuarios', (req, res) => {
   const { nome, login, senha } = req.body;
 
   db.query(
-    'INSERT INTO tbUsuarios (nome, login, senha) VALUES (?, ?, ?)',
+    `INSERT INTO tbUsuarios 
+     (nome, login, senha, atualizado_em, atualizado_por) 
+     VALUES (?, ?, ?, NOW(), 1)`,
     [nome, login, senha],
     (err) => {
-      if (err) return res.status(500).send(err);
+      if (err) return res.status(500).send(err.sqlMessage);
       res.send('Usuário criado');
     }
   );
