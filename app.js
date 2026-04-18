@@ -6,7 +6,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  res.send('API rodando 🚀');
+  res.redirect('/login.html');
 });
 
 app.get('/usuarios', (req, res) => {
