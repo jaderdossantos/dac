@@ -10,7 +10,7 @@
 
   <input id="nome" class="form-control mb-2" placeholder="Nome">
   <input id="login" class="form-control mb-2" placeholder="Login">
-  <input id="senha" type="password" class="form-control mb-2" placeholder="Senha">
+  <input id="senha" type="password" class="form-control mb-3" placeholder="Senha">
 
   <button class="btn btn-success" onclick="cadastrar()">Cadastrar</button>
 
@@ -20,13 +20,20 @@
       const login = document.getElementById('login').value;
       const senha = document.getElementById('senha').value;
 
-      await fetch('/usuarios', {
+      const res = await fetch('/usuarios', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome, login, senha })
       });
 
-      alert('Usuário criado!');
+      if (res.ok) {
+        alert('Usuário cadastrado com sucesso!');
+        
+        // 🔥 REDIRECIONA PRO LOGIN
+        window.location.href = '/login.html';
+      } else {
+        alert('Erro ao cadastrar');
+      }
     }
   </script>
 
