@@ -4,47 +4,105 @@
   <title>Usuários</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="container mt-5">
+<body>
 
-  <h2>Usuários</h2>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand">Sistema</a>
 
-  <!-- BOTÕES -->
-  <a href="/home.html" class="btn btn-secondary mb-3">Voltar</a>
+    <ul class="navbar-nav">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+          Cadastros
+        </a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="/usuarios.html">Usuários</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container mt-5">
+
+  <h2 class="mb-4">Usuários</h2>
+
   <a href="/cadastro.html" class="btn btn-primary mb-3">Novo Usuário</a>
 
-  <!-- TABELA -->
-  <table class="table table-bordered">
-    <thead>
+  <table class="table table-striped table-hover shadow">
+    <thead class="table-dark">
       <tr>
         <th>ID</th>
         <th>Nome</th>
         <th>Login</th>
+        <th>Ações</th>
       </tr>
     </thead>
     <tbody id="tabela"></tbody>
   </table>
 
-  <script>
-    async function carregar() {
-      const res = await fetch('/usuarios');
-      const data = await res.json();
+</div>
 
-      const tabela = document.getElementById('tabela');
-      tabela.innerHTML = '';
+<script>
+async function carregar() {
+  const res = await fetch('/usuarios');
+  const data = await res.json();
 
-      data.forEach(u => {
-        tabela.innerHTML += `
-          <tr>
-            <td>${u.usuario_id}</td>
-            <td>${u.nome}</td>
-            <td>${u.login}</td>
-          </tr>
-        `;
-      });
-    }
+  const tabela = document.getElementById('tabela');
+  tabela.innerHTML = '';
 
-    carregar();
-  </script>
+  data.forEach(u => {
+    tabela.innerHTML += `
+      <tr>
+        <td>${u.usuario_id}</td>
+        <td>${u.nome}</td>
+        <td>${u.login}</td>
+        <td>
+          <button class="btn btn-warning btn-sm me-1" onclick="editar(${u.usuario_id}, '${u.nome}', '${u.login}')">
+            Editar
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="deletar(${u.usuario_id})">
+            Excluir
+          </button>
+        </td>
+      </tr>
+    `;
+  });
+}
 
+async function deletar(id) {
+  if (!confirm('Deseja excluir este usuário?')) return;
+
+  await fetch('/usuarios/' + id, {
+    method: 'DELETE'
+  });
+
+  carregar();
+}
+
+async function editar(id, nomeAtual, loginAtual) {
+  const nome = prompt('Novo nome:', nomeAtual);
+  const login = prompt('Novo login:', loginAtual);
+  const senha = prompt('Nova senha:');
+
+  if (!nome || !login || !senha) {
+    alert('Preencha todos os campos!');
+    return;
+  }
+
+  await fetch('/usuarios/' + id, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nome, login, senha })
+  });
+
+  carregar();
+}
+
+carregar();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
