@@ -17,31 +17,39 @@
   <button class="btn btn-success" onclick="cadastrar()">Cadastrar</button>
 
   <script>
-    async function cadastrar() {
-      const nome = document.getElementById('nome').value;
-      const login = document.getElementById('login').value;
-      const senha = document.getElementById('senha').value;
+async function cadastrar() {
+  const nome = document.getElementById('nome').value;
+  const login = document.getElementById('login').value;
+  const senha = document.getElementById('senha').value;
 
-      if (!nome || !login || !senha) {
-        alert('Preencha todos os campos!');
-        return;
-      }
+  if (!nome || !login || !senha) {
+    alert('Preencha todos os campos!');
+    return;
+  }
 
-      const res = await fetch('/usuarios', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nome, login, senha })
-      });
+  const res = await fetch('/usuarios', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nome, login, senha })
+  });
 
-      if (res.ok) {
-        alert('Usuário cadastrado com sucesso!');
-        window.location.href = '/login.html';
-      } else {
-        const erro = await res.text();
-        alert('Erro: ' + erro);
-      }
+  if (res.ok) {
+    alert('Usuário cadastrado com sucesso!');
+
+    const origem = localStorage.getItem('origemCadastro');
+
+    if (origem === 'login') {
+      window.location.href = '/login.html';
+    } else {
+      window.location.href = '/usuarios.html';
     }
-  </script>
+
+  } else {
+    const erro = await res.text();
+    alert('Erro: ' + erro);
+  }
+}
+</script>
 
 </body>
 </html>

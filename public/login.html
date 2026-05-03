@@ -14,10 +14,17 @@
   <button class="btn btn-primary mb-2" onclick="logar()">Entrar</button>
 
   <br>
-
-  <a href="/cadastro.html" class="btn btn-secondary">Cadastrar Usuário</a>
+  
+  <a href="#" class="btn btn-secondary" onclick="irParaCadastro()">
+    Cadastrar Usuário
+  </a>
 
   <script>
+    function irParaCadastro() {
+      localStorage.setItem('origemCadastro', 'login');
+      window.location.href = '/cadastro.html';
+    }
+
     async function logar() {
       const login = document.getElementById('login').value;
       const senha = document.getElementById('senha').value;
