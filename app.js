@@ -31,6 +31,23 @@ app.post('/usuarios', (req, res) => {
   );
 });
 
+
+app.put('/usuarios/:id', (req, res) => {
+  const { id } = req.params;
+  const { nome, login, senha } = req.body;
+
+  db.query(
+    `UPDATE tbUsuarios 
+     SET nome = ?, login = ?, senha = ?, atualizado_em = NOW()
+     WHERE usuario_id = ?`,
+    [nome, login, senha, id],
+    (err) => {
+      if (err) return res.status(500).send(err.sqlMessage);
+      res.send('Usuário atualizado');
+    }
+  );
+});
+
 app.delete('/usuarios/:id', (req, res) => {
   const { id } = req.params;
 
