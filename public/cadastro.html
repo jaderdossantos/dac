@@ -19,6 +19,11 @@
       const nome = document.getElementById('nome').value;
       const login = document.getElementById('login').value;
       const senha = document.getElementById('senha').value;
+      
+       if (!nome || !login || !senha) {
+    alert('Preencha todos os campos!');
+    return;
+  }
 
       const res = await fetch('/usuarios', {
         method: 'POST',

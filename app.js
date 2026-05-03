@@ -19,6 +19,10 @@ app.get('/usuarios', (req, res) => {
 app.post('/usuarios', (req, res) => {
   const { nome, login, senha } = req.body;
 
+   if (!nome || !login || !senha) {
+    return res.status(400).send('Campos obrigatórios não preenchidos');
+  }
+
   db.query(
     `INSERT INTO tbUsuarios 
      (nome, login, senha, atualizado_em, atualizado_por) 
