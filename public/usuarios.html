@@ -8,9 +8,12 @@
 
   <h2>Usuários</h2>
 
+  <!-- BOTÕES (fora do script) -->
+  <a href="/home.html" class="btn btn-secondary mb-3">Voltar</a>
   <a href="/cadastro.html" class="btn btn-primary mb-3">Novo Usuário</a>
 
-  <table class="table table-bordered">
+  <!-- TABELA -->
+  <table class="table table-bordered table-striped">
     <thead>
       <tr>
         <th>ID</th>
@@ -21,6 +24,7 @@
     <tbody id="tabela"></tbody>
   </table>
 
+  <!-- SCRIPT LIMPO -->
   <script>
     async function carregar() {
       const res = await fetch('/usuarios');
@@ -29,7 +33,6 @@
       const tabela = document.getElementById('tabela');
       tabela.innerHTML = '';
 
-      <a href="/home.html" class="btn btn-secondary mb-3">Voltar</a>
       data.forEach(u => {
         tabela.innerHTML += `
           <tr>
