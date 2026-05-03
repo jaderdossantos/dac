@@ -8,6 +8,9 @@
 
   <h2>Cadastrar Usuário</h2>
 
+  <!-- BOTÃO VOLTAR -->
+  <a href="/home.html" class="btn btn-secondary mb-3">Voltar</a>
+
   <input id="nome" class="form-control mb-2" placeholder="Nome">
   <input id="login" class="form-control mb-2" placeholder="Login">
   <input id="senha" type="password" class="form-control mb-3" placeholder="Senha">
@@ -19,11 +22,11 @@
       const nome = document.getElementById('nome').value;
       const login = document.getElementById('login').value;
       const senha = document.getElementById('senha').value;
-      
-       if (!nome || !login || !senha) {
-    alert('Preencha todos os campos!');
-    return;
-  }
+
+      if (!nome || !login || !senha) {
+        alert('Preencha todos os campos!');
+        return;
+      }
 
       const res = await fetch('/usuarios', {
         method: 'POST',
@@ -32,12 +35,12 @@
       });
 
       if (res.ok) {
-  alert('Usuário cadastrado com sucesso!');
-  window.location.href = '/login.html';
-} else {
-  const erro = await res.text();
-  alert('Erro: ' + erro);
-}
+        alert('Usuário cadastrado com sucesso!');
+        window.location.href = '/login.html';
+      } else {
+        const erro = await res.text();
+        alert('Erro: ' + erro);
+      }
     }
   </script>
 
