@@ -15,16 +15,12 @@
 
   <br>
   
-  <a href="#" class="btn btn-secondary" onclick="irParaCadastro()">
+  <!-- AGORA SIMPLES -->
+  <a href="/cadastro.html" class="btn btn-secondary">
     Cadastrar Usuário
   </a>
 
   <script>
-    function irParaCadastro() {
-      localStorage.setItem('origemCadastro', 'login');
-      window.location.href = '/cadastro.html';
-    }
-
     async function logar() {
       const login = document.getElementById('login').value;
       const senha = document.getElementById('senha').value;
