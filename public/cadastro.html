@@ -38,6 +38,8 @@ async function cadastrar() {
 
     const origem = localStorage.getItem('origemCadastro');
 
+    console.log('Origem:', origem);
+
     if (origem === 'login') {
       window.location.href = '/login.html';
     } else {
