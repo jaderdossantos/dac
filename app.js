@@ -80,6 +80,83 @@ app.post('/login', (req, res) => {
 });
 
 
+app.get('/pessoas', (req, res) => {
+  db.query(`
+    SELECT 
+      p.pessoa_id,
+      p.nome,
+      p.cpf,
+      p.nascimento,
+      p.telefone,
+      t.descricao AS tipo
+    FROM tbPessoas p
+    JOIN tbPessoaTipo t 
+      ON p.pessoa_tipo_id = t.pessoa_tipo_id
+  `, (err, result) => {
+    if (err) return res.status(500).send(err);
+    res.json(result);
+  });
+});
+
+
+app.post('/pessoas', (req, res) => {
+  const { nome, cpf, nascimento, telefone } = req.body;
+
+  if (!nome || !cpf || !nascimento || !telefone) {
+    return res.status(400).send('Preencha todos os campos');
+  }
+
+  db.query(`
+    INSERT INTO tbPessoas
+    (nome, cpf, nascimento, telefone, pessoa_tipo_id, atualizado_por, atualizado_em)
+    VALUES (?, ?, ?, ?, 1, 1, NOW())
+  `,
+  [nome, cpf, nascimento, telefone],
+  (err) => {
+    if (err) return res.status(500).send(err.sqlMessage);
+
+    res.send('Pessoa cadastrada');
+  });
+});
+
+
+
+app.put('/pessoas/:id', (req, res) => {
+  const { id } = req.params;
+  const { nome, cpf, nascimento, telefone } = req.body;
+
+  db.query(`
+    UPDATE tbPessoas
+    SET nome = ?,
+        cpf = ?,
+        nascimento = ?,
+        telefone = ?,
+        atualizado_em = NOW()
+    WHERE pessoa_id = ?
+  `,
+  [nome, cpf, nascimento, telefone, id],
+  (err) => {
+    if (err) return res.status(500).send(err.sqlMessage);
+
+    res.send('Pessoa atualizada');
+  });
+});
+
+
+app.delete('/pessoas/:id', (req, res) => {
+  const { id } = req.params;
+
+  db.query(
+    'DELETE FROM tbPessoas WHERE pessoa_id = ?',
+    [id],
+    (err) => {
+      if (err) return res.status(500).send(err.sqlMessage);
+
+      res.send('Pessoa deletada');
+    }
+  );
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
