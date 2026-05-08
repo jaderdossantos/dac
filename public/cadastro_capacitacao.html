@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cadastro Capacitação</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+
+  <h2>Cadastrar Capacitação</h2>
+
+  <a href="/capacitacoes.html"
+     class="btn btn-secondary mb-3">
+    Voltar
+  </a>
+
+  <label>Funcionário</label>
+
+  <select id="funcionario"
+          class="form-select mb-3">
+  </select>
+
+  <label>Tipo de Capacitação</label>
+
+  <select id="tipo"
+          class="form-select mb-3">
+  </select>
+
+  <button class="btn btn-success"
+          onclick="cadastrar()">
+    Cadastrar
+  </button>
+
+<script>
+
+async function carregarFuncionarios() {
+
+  const res = await fetch('/pessoas');
+  const data = await res.json();
+
+  const select = document.getElementById('funcionario');
+
+  data.forEach(p => {
+
+    select.innerHTML += `
+      <option value="${p.pessoa_id}">
+        ${p.nome}
+      </option>
+    `;
+
+  });
+
+}
+
+async function carregarTipos() {
+
+  const res = await fetch('/capacitacao-tipos');
+  const data = await res.json();
+
+  const select = document.getElementById('tipo');
+
+  data.forEach(t => {
+
+    select.innerHTML += `
+      <option value="${t.capacitacao_tipo_id}">
+        ${t.descricao}
+      </option>
+    `;
+
+  });
+
+}
+
+async function cadastrar() {
+
+  const funcionario_id =
+    document.getElementById('funcionario').value;
+
+  const capacitacao_tipo_id =
+    document.getElementById('tipo').value;
+
+  const res = await fetch('/capacitacoes', {
+
+    method: 'POST',
+
+    headers: {
+      'Content-Type': 'application/json'
+    },
+
+    body: JSON.stringify({
+      funcionario_id,
+      capacitacao_tipo_id
+    })
+
+  });
+
+  if (res.ok) {
+
+    alert('Capacitação cadastrada!');
+
+    window.location.href = '/capacitacoes.html';
+
+  } else {
+
+    const erro = await res.text();
+
+    alert('Erro: ' + erro);
+
+  }
+
+}
+
+carregarFuncionarios();
+carregarTipos();
+
+</script>
+
+</body>
+</html>
