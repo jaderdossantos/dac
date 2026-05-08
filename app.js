@@ -157,6 +157,102 @@ app.delete('/pessoas/:id', (req, res) => {
   );
 });
 
+app.get('/capacitacao-tipos', (req, res) => {
+
+  db.query(
+    'SELECT * FROM tbCapacitacaoTipo',
+    (err, result) => {
+
+      if (err) return res.status(500).send(err);
+
+      res.json(result);
+    }
+  );
+
+});
+
+app.get('/capacitacoes', (req, res) => {
+
+  db.query(`
+    SELECT
+      c.capacitacao_id,
+      c.datahora,
+      p.nome AS funcionario,
+      t.descricao AS tipo
+
+    FROM tbCapacitacao c
+
+    JOIN tbPessoas p
+      ON c.funcionario_id = p.pessoa_id
+
+    JOIN tbCapacitacaoTipo t
+      ON c.capacitacao_tipo_id = t.capacitacao_tipo_id
+  `,
+  (err, result) => {
+
+    if (err) return res.status(500).send(err);
+
+    res.json(result);
+  });
+
+});
+
+app.post('/capacitacoes', (req, res) => {
+
+  const {
+    funcionario_id,
+    capacitacao_tipo_id
+  } = req.body;
+
+  if (!funcionario_id || !capacitacao_tipo_id) {
+    return res.status(400).send('Preencha todos os campos');
+  }
+
+  db.query(`
+    INSERT INTO tbCapacitacao
+    (
+      datahora,
+      funcionario_id,
+      capacitacao_tipo_id,
+      atualizado_em,
+      atualizado_por
+    )
+    VALUES
+    (
+      NOW(),
+      ?,
+      ?,
+      NOW(),
+      1
+    )
+  `,
+  [funcionario_id, capacitacao_tipo_id],
+  (err) => {
+
+    if (err) return res.status(500).send(err.sqlMessage);
+
+    res.send('Capacitação cadastrada');
+  });
+
+});
+
+app.delete('/capacitacoes/:id', (req, res) => {
+
+  const { id } = req.params;
+
+  db.query(
+    'DELETE FROM tbCapacitacao WHERE capacitacao_id = ?',
+    [id],
+    (err) => {
+
+      if (err) return res.status(500).send(err.sqlMessage);
+
+      res.send('Capacitação deletada');
+    }
+  );
+
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
