@@ -64,11 +64,23 @@ async function carregar() {
         <td>${new Date(c.datahora).toLocaleString()}</td>
 
         <td>
+
+          <button
+            class="btn btn-warning btn-sm"
+            onclick="editar(
+              ${c.capacitacao_id},
+              '${c.funcionario_id}',
+              '${c.capacitacao_tipo_id}'
+            )">
+            Editar
+          </button>
+
           <button
             class="btn btn-danger btn-sm"
             onclick="deletar(${c.capacitacao_id})">
             Excluir
           </button>
+
         </td>
       </tr>
     `;
@@ -83,6 +95,42 @@ async function deletar(id) {
 
   await fetch('/capacitacoes/' + id, {
     method: 'DELETE'
+  });
+
+  carregar();
+
+}
+
+async function editar(id, funcionarioAtual, tipoAtual) {
+
+  const funcionario_id = prompt(
+    'Novo ID do funcionário:',
+    funcionarioAtual
+  );
+
+  const capacitacao_tipo_id = prompt(
+    'Novo ID do tipo:',
+    tipoAtual
+  );
+
+  if (!funcionario_id || !capacitacao_tipo_id) {
+    alert('Preencha todos os campos');
+    return;
+  }
+
+  await fetch('/capacitacoes/' + id, {
+
+    method: 'PUT',
+
+    headers: {
+      'Content-Type': 'application/json'
+    },
+
+    body: JSON.stringify({
+      funcionario_id,
+      capacitacao_tipo_id
+    })
+
   });
 
   carregar();

@@ -236,6 +236,33 @@ app.post('/capacitacoes', (req, res) => {
 
 });
 
+app.put('/capacitacoes/:id', (req, res) => {
+
+  const { id } = req.params;
+
+  const {
+    funcionario_id,
+    capacitacao_tipo_id
+  } = req.body;
+
+  db.query(`
+    UPDATE tbCapacitacao
+    SET
+      funcionario_id = ?,
+      capacitacao_tipo_id = ?,
+      atualizado_em = NOW()
+    WHERE capacitacao_id = ?
+  `,
+  [funcionario_id, capacitacao_tipo_id, id],
+  (err) => {
+
+    if (err) return res.status(500).send(err.sqlMessage);
+
+    res.send('Capacitação atualizada');
+  });
+
+});
+
 app.delete('/capacitacoes/:id', (req, res) => {
 
   const { id } = req.params;
